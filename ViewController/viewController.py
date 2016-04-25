@@ -19,8 +19,6 @@ def init():
     totalWidth = info_object.current_w
     totalHeight = info_object.current_h
 
-    totalWidth = 1440
-    totalHeight = 700
     screen = pygame.display.set_mode((totalWidth, totalHeight))
 
     # Init background
@@ -37,7 +35,7 @@ def drawQuestion(question_text):
 
     # 50 symbols is equal 1 line, REFACTOR IT
     question_text = prefix_question_text(question_text)
-
+    print(question_text)
     question_rendered = render_text_rect(question_text, questionFont, questionBlock, (216, 216, 216), False, 1);
     screen.blit(question_rendered, questionBlock.topleft)
     pygame.display.update()
@@ -56,7 +54,6 @@ def drawQuestion(question_text):
         answer_block = pygame.Rect(
             (block_width * index, totalHeight - block_height, block_width, block_height))
         answer_font = pygame.font.Font("fonts/OpenSans-Light.ttf", totalWidth // 45)
-        print(index)
         answer_text = prefix_answer_text(words[index])
         answer_rendered = render_text_rect(answer_text, answer_font, answer_block, (0, 0, 0), answersColors[index], 1)
         screen.blit(answer_rendered, answer_block.topleft)
@@ -72,13 +69,13 @@ def prefix_answer_text(text):
 def prefix_question_text(text):
     size = 51
     if len(text) < size:
-        question_text = "\n\n\n\n" + text
+        text = "\n\n\n\n" + text
     elif len(text) in range(size, size * 2):
         text = "\n\n\n" + text
     elif len(text) in range(size * 2 + 1, size * 3):
-        question_text = "\n\n" + text
+        text = "\n\n" + text
     elif len(text) in range(size * 3 + 1, size * 4):
-        question_text = "\n" + text
+        text = "\n" + text
     return text
 
 
