@@ -16,7 +16,7 @@ if __name__ == '__main__':
         # Connect to backend for refgistartion
         # GetQuestion and retrieve itfd
         # Retrieve the question and drawit
-        viewController.drawQuestion("Paskutinė savaitė PulseTip naudojimui. Kaip vertinate šį apklausų ir komunikacijos įrenginį?")
+        viewController.drawQuestion("Bla bla bla bla?")
 
         #wait for the answer question
 
