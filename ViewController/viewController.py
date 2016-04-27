@@ -10,6 +10,12 @@ answersColors={0:(255,204,128),
                3:(174, 213, 129),
                4:(102,187,106)}
 
+answersPositionsMap = { 1: [2],
+                        2: [1,3],
+                        3: [0, 2, 4],
+                        4: [0,1,3,4],
+                        5: [0, 1, 2, 3, 4]}
+
 
 def init():
     global totalWidth, totalHeight, screen
@@ -19,44 +25,136 @@ def init():
     totalWidth = info_object.current_w
     totalHeight = info_object.current_h
 
+    totalWidth = 1280
+    totalHeight = 700
+
     screen = pygame.display.set_mode((totalWidth, totalHeight))
+    print("Pygame initiated in " + str(totalWidth) + "x" + str(totalHeight))
+
+
+def draw_question(question_text, answers):
+    global totalHeight, totalWidth, screen
 
     # Init background
     bg = pygame.image.load("pt-terminal-bg.png")
     screen.blit(pygame.transform.scale(bg, (totalWidth, totalHeight)), (0, 0));
     pygame.display.update()
-    print("Pygame initiated in " + str(totalWidth) + "x" + str(totalHeight))
 
-def drawQuestion(question_text):
-    global totalHeight, totalWidth, screen
-    questionFontSize = totalWidth // 30;
+    question_font_size = totalWidth // 30;
     questionBlock = pygame.Rect((margin, margin, totalWidth - margin * 2,  totalHeight * 0.7))
-    questionFont = pygame.font.Font("fonts/OpenSans-Light.ttf", questionFontSize)
+    questionFont = pygame.font.Font("fonts/OpenSans-Light.ttf", question_font_size)
 
     # 50 symbols is equal 1 line, REFACTOR IT
     question_text = prefix_question_text(question_text)
-    print(question_text)
     question_rendered = render_text_rect(question_text, questionFont, questionBlock, (216, 216, 216), False, 1);
     screen.blit(question_rendered, questionBlock.topleft)
     pygame.display.update()
 
-    # Show answers section
-    words = []  # MOCK DATA
-    words.append("Life")
-    words.append("is")
-    words.append("beatiful")
-    words.append("with")
-    words.append("PulseTip")
+    layout = len(answers);
+    if layout != 0:
+        position_indexes = answersPositionsMap[layout]
+        for index in range(len(answers)):
+            answer = answers[index]
+            answer_text = answer['answer']
+            position = position_indexes[index]
+            block_width = round(totalWidth * 0.2); #20 percents horizontaly of the screen
+            block_height = totalHeight * 0.3; #30 percents verticaly of the screen
+            answer_block = pygame.Rect((block_width * position, totalHeight - block_height, block_width, block_height))
+            answer_font_size = int(totalWidth // 60 - (float(len(answer_text)) / 100 + 1))
 
-    for index in range(len(words)):
-        block_width = totalWidth // 5;
-        block_height = totalHeight * 0.3 - 3 * margin;
-        answer_block = pygame.Rect(
-            (block_width * index, totalHeight - block_height, block_width, block_height))
-        answer_font = pygame.font.Font("fonts/OpenSans-Light.ttf", totalWidth // 45)
-        answer_text = prefix_answer_text(words[index])
-        answer_rendered = render_text_rect(answer_text, answer_font, answer_block, (0, 0, 0), answersColors[index], 1)
-        screen.blit(answer_rendered, answer_block.topleft)
+            answer_font = pygame.font.Font("fonts/OpenSans-Light.ttf", answer_font_size)
+            answer_text = prefix_answer_text(answer_text)
+            answer_rendered = render_text_rect(answer_text, answer_font, answer_block, (0, 0, 0), answersColors[position], 1)
+            screen.blit(answer_rendered, answer_block.topleft)
+
+    pygame.display.update()
+
+
+def say_thanks():
+    bg = pygame.image.load("pt-terminal-bg.png")
+    screen.blit(pygame.transform.scale(bg, (totalWidth, totalHeight)), (0, 0));
+    font = pygame.font.Font("fonts/OpenSans-Light.ttf", totalWidth // 30)
+    text_block = pygame.Rect((0, totalHeight // 2, totalWidth, totalHeight / 8))
+    text_rendered = render_text_rect("Thank you!", font, text_block, (255, 255, 255), False, 1)
+    screen.blit(text_rendered, text_block.topleft)
+    pygame.display.update()
+
+
+def display_question_stats(department, question_text, answers):
+    bg = pygame.image.load("pt-terminal-bg.png")
+    screen.blit(pygame.transform.scale(bg, (totalWidth, totalHeight)), (0, 0));
+    """
+    top_block_height = totalHeight * 0.1
+
+    department_label_font = pygame.font.Font("fonts/OpenSans-Light.ttf", totalWidth // 60)
+    department_label = department_label_font.render(department, 1, (255,255,255))
+    screen.blit(department_label, (totalWidth * 0.02, top_block_height * 0.3))
+
+    question_label_font = pygame.font.Font("fonts/OpenSans-Light.ttf", totalWidth // 30)
+    question_label = question_label_font.render(question_text, 1, (255,255,255))
+    screen.blit(question_label, (totalWidth * 0.02, top_block_height * 0.7))
+    """
+    top_block_height = int(round(totalHeight * 0.21))
+    top_block = pygame.Surface((totalWidth, top_block_height), pygame.SRCALPHA, 32)
+
+    company_logo = pygame.image.load("company_logo.svg")
+    company_logo = pygame.transform.scale(company_logo, (30, 30))
+    top_block.blit(company_logo,(totalWidth * 0.02, top_block_height * 0.3))
+
+    department_label_font = pygame.font.Font("fonts/OpenSans-Light.ttf", totalWidth // 60)
+    department_label = department_label_font.render(department, 1, (255, 255, 255))
+    top_block.blit(department_label, (totalWidth * 0.02 + company_logo.get_rect().size[0] + 5, top_block_height * 0.3))
+
+    question_label_font = pygame.font.Font("fonts/OpenSans-Light.ttf", totalWidth // 60)
+    #question_label = question_label_font.render(question_text, 1, (255, 255, 255))
+
+    question_label = render_text_rect(question_text, question_label_font, top_block.get_rect(),  (255, 255, 255), False, 0)
+    screen.blit(question_label, (totalWidth * 0.02, top_block_height * 0.7))
+
+    screen.blit(top_block, (0, 0))
+
+
+
+
+
+
+    answer_block_height = totalHeight * 0.7;
+
+    accumulated_x = 0
+    layout = len(answers);
+    if layout != 0:
+        position_indexes = answersPositionsMap[layout]
+        for index in range(len(answers)):
+            answer = answers[index]
+            percent = answer['percent']
+            position = position_indexes[index]
+
+            answer_block_width = totalWidth / 100 * percent
+            answer_block = pygame.Surface((round(answer_block_width), round(totalHeight * 0.7)))
+            answer_block.fill(answersColors[position])
+
+            percent_text_font_size = int(round(totalHeight * 0.06))
+            percent_text_font = pygame.font.Font("fonts/OpenSans-Light.ttf", percent_text_font_size)
+            percent_text_block = percent_text_font.render(str(percent) + "%", True, (51, 51, 51))
+            midpoint = answer_block_width / 2 - percent_text_block.get_width() / 2;
+            answer_block.blit(percent_text_block, (midpoint, 20))
+
+            answer_text = answer['answer']
+            if len(answer_text) > 55:
+                answer_text = answer_text[:52] + "..."
+
+            answer_text_font_size = int(totalWidth // 60 - (float(len(answer_text)) / 100 + 1))
+            #answer_text_font_size = int(round(totalHeight * 0.06))
+            answer_text_font = pygame.font.Font("fonts/OpenSans-Light.ttf", answer_text_font_size)
+            answer_text_block = answer_text_font.render(answer_text, True, (51, 51, 51))
+            answer_text_block = pygame.transform.rotate(answer_text_block, 90)
+
+            answer_rect = answer_block.get_rect()
+            answer_text_block_y = answer_rect.bottom - answer_text_block.get_height() - 30;
+            answer_block.blit(answer_text_block, (answer_rect.left, answer_text_block_y))
+
+            screen.blit(answer_block, (accumulated_x, totalHeight * 0.3))
+            accumulated_x += answer_block_width
 
     pygame.display.update()
 
@@ -69,13 +167,13 @@ def prefix_answer_text(text):
 def prefix_question_text(text):
     size = 51
     if len(text) < size:
-        text = "\n\n\n\n" + text
+        text = "\n\n\n\n\n" + text
     elif len(text) in range(size, size * 2):
-        text = "\n\n\n" + text
+        text = "\n\n\n\n" + text
     elif len(text) in range(size * 2 + 1, size * 3):
-        text = "\n\n" + text
+        text = "\n\n\n" + text
     elif len(text) in range(size * 3 + 1, size * 4):
-        text = "\n" + text
+        text = "\n\n" + text
     return text
 
 
@@ -84,6 +182,7 @@ class text_rectException:
         self.message = message
     def __str__(self):
         return self.message
+
 
 def render_text_rect(string, font, rect, text_color, background_color, justification=0):
     """Returns a surface containing the passed text string, reformatted
