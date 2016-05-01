@@ -25,8 +25,8 @@ def init():
     totalWidth = info_object.current_w
     totalHeight = info_object.current_h
 
-    totalWidth = 1024
-    totalHeight = 900
+    #totalWidth = 1024
+    #totalHeight = 900
 
     screen = pygame.display.set_mode((totalWidth, totalHeight))
     print("Pygame initiated in " + str(totalWidth) + "x" + str(totalHeight))
