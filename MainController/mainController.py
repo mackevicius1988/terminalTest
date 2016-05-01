@@ -57,11 +57,14 @@ def get_and_display_question(raspi_id):
     try:
         question_data = backendService.get_question_data(raspi_id)
     except Exception as e:
+        print("Erroras")
         viewController.show_error_message(e)
 
     if question_data is not None:
+        print("Ir dar klausimas")
         viewController.draw_question(question_data)
 
+    print(question_data)
     return question_data
 
 
