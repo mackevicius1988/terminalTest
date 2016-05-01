@@ -12,7 +12,8 @@ if __name__ == '__main__':
         #if question_data['questionMapId'] is None:
          #   continue
 
-        got_question =  question_data['questionMapId'] is not None
+        got_question = question_data['questionMapId'] is not None
+        print(got_question)
 
         cardId, answerId = mainController.wait_for_nfc_input(got_question);
 
