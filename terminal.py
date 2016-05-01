@@ -1,45 +1,16 @@
-import pygame, time, requests
-from ViewController import viewController
+import pygame, time, logging, serial
 
-
-
-
-
-
-def get_question_data():
-    #raspId
-    resp = requests.get('http://dev.pulsetip.com/api/v1/answers/terminal/13212')
-    data = resp.json();
-    return data['questionId'], data['questionMapId'], data['question'], data['answers'], data['departmentName'], data[
-        'companyName']
-
+from MainController import mainController
 
 if __name__ == '__main__':
-    viewController.init()
+    # Init configurations, raspi_id and screen
+    raspi_id = mainController.init()
+    mainController.connect_terminal(raspi_id)
+
     while 1:
-        # Connect to backend for refgistartion
-        # GetQuestion and retrieve itfd
-        # Retrieve the question and drawit
-        questionId, questionMapId, questionText, answers, departmentName, companyName = get_question_data()
-        viewController.draw_question(questionText, answers)
+        question_data = mainController.get_and_display_question(raspi_id)
 
-        #wait for the answer question
+        cardId, answerId = mainController.wait_for_nfc_input();
 
-        # Draw stats
-
-
-        event = pygame.event.wait()
-        if event.type == 2:
-            viewController.say_thanks()
-            time.sleep(float(1))
-            response = requests.get('http://dev.pulsetip.com/api/v1/question_day_stats/1231')
-            answers = response.json();
-            # add questionMapId
-            viewController.display_question_stats(companyName + '(' + departmentName + ')', questionText, answers)
-            time.sleep(float(5))
-
-
-
-
-
-
+        if cardId and answerId:
+            mainController.submit_answer(question_data, raspi_id, cardId, answerId)
