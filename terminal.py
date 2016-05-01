@@ -12,7 +12,7 @@ if __name__ == '__main__':
         #if question_data['questionMapId'] is None:
          #   continue
 
-        cardId, answerId = mainController.wait_for_nfc_input();
+        cardId, answerId = mainController.wait_for_nfc_input(question_data['questionMapId']);
 
         if cardId and answerId:
             mainController.submit_answer(question_data, raspi_id, cardId, answerId)
