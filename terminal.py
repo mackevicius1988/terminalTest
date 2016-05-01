@@ -11,9 +11,8 @@ if __name__ == '__main__':
         question_data = mainController.get_and_display_question(raspi_id)
         #if question_data['questionMapId'] is None:
          #   continue
-        print("Question is: ")
-        print(question_data['questionMapId'])
-        got_question = question_data['questionMapId'] is not None
+
+        got_question = question_data['questionMapId'] != ''
         print(got_question)
 
         cardId, answerId = mainController.wait_for_nfc_input(got_question);
