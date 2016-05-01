@@ -9,6 +9,8 @@ if __name__ == '__main__':
 
     while 1:
         question_data = mainController.get_and_display_question(raspi_id)
+        #if question_data['questionMapId'] is None:
+         #   continue
 
         cardId, answerId = mainController.wait_for_nfc_input();
 

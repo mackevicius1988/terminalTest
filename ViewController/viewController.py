@@ -28,7 +28,7 @@ def init():
     #totalWidth = 1024
     #totalHeight = 900
 
-    screen = pygame.display.set_mode((totalWidth, totalHeight))
+    screen = pygame.display.set_mode((totalWidth, totalHeight), pygame.FULLSCREEN)
     print("Pygame initiated in " + str(totalWidth) + "x" + str(totalHeight))
 
 
@@ -115,10 +115,9 @@ def display_question_stats(department, question_text, answers):
     question_label = render_text_rect(question_text, question_label_font, top_block.get_rect(), (255, 255, 255), False,
                                       0)
     screen.blit(question_label, (totalWidth * 0.02, top_block_height * 0.7))
-
     screen.blit(top_block, (0, 0))
 
-    answer_block_height = totalHeight * 0.7;
+    answer_block_height = round(totalHeight * 0.7);
 
     accumulated_x = 0
     layout = len(answers);
@@ -130,8 +129,8 @@ def display_question_stats(department, question_text, answers):
             percent = answer['percent']
             position = position_indexes[index]
 
-            answer_block_width = totalWidth / 100 * int(percent)
-            answer_block = pygame.Surface((round(answer_block_width), round(totalHeight * 0.7)))
+            answer_block_width = int(round(totalWidth * int(answer['percent']) / 100))
+            answer_block = pygame.Surface((answer_block_width, answer_block_height))
             answer_block.fill(answersColors[position])
 
             percent_text_font_size = int(round(totalHeight * 0.06))
