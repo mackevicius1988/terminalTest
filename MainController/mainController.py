@@ -6,6 +6,7 @@ from NFCReader import nfcReader
 
 logging.basicConfig(format='%(asctime)s %(message)s', filename='terminal.log', level=logging.DEBUG)
 
+admin_cards = ["A1C43745", "E65C3745"]
 
 def init():
     # TODO Read configuration
@@ -111,4 +112,12 @@ def submit_answer(question_data, raspi_id, cardId, answerId):
 
 
 def wait_for_nfc_input(timeout=9000):
+    card_id, answer_id = nfcReader.read_nfc(timeout)
+    if card_id in admin_cards:
+        viewController.show_message("Shutting down PulseTip terminal...")
+        time.sleep(2)
+        pygame.quit()
+        raise SystemExit
+    else:
+        return False, False
     return nfcReader.read_nfc(timeout)
