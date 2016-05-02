@@ -119,14 +119,15 @@ def wait_for_nfc_input(layout, timeout):
         pygame.quit()
         raise SystemExit
 
-    #elif got_question is False and card_id not in admin_cards:
-     #   return False, False
     else:
         if layout == 5:
             return card_id, answer_id
         elif layout == 4:
-            pass
+            if answer_id == 3:
+                return False, False
         elif layout == 3:
-            pass
+            if answer_id in (2, 4):
+                return False, False
         elif layout == 2:
-            pass
+            if answer_id in (2, 3, 4):
+                return False, False
