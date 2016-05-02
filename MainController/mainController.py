@@ -111,14 +111,14 @@ def submit_answer(question_data, raspi_id, cardId, answerId):
         get_and_show_question_stats(question_map_id, question_text, company_name, departament_name)
 
 
-def wait_for_nfc_input(got_question, timeout=9000):
+def wait_for_nfc_input(timeout):
     card_id, answer_id = nfcReader.read_nfc(timeout)
     if card_id in admin_cards:
         viewController.show_message("Shutting down PulseTip terminal...")
         time.sleep(2)
         pygame.quit()
         raise SystemExit
-    elif got_question is False and card_id not in admin_cards:
-        return False, False
+    #elif got_question is False and card_id not in admin_cards:
+     #   return False, False
     else:
         return card_id, answer_id

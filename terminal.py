@@ -11,14 +11,16 @@ if __name__ == '__main__':
         question_data = mainController.get_and_display_question(raspi_id)
         got_question = question_data['questionMapId'] != ''
 
+        if got_question is False:
+            # No question, wait for the minute
+            time.sleep(60)
+            # Back to question retrieval
+            continue
+
         while 1:
-            print(got_question)
+            card_id, answer_id = mainController.wait_for_nfc_input();
+            if card_id is False:
+                continue # wait for another input
 
-            cardId, answerId = mainController.wait_for_nfc_input(got_question);
-
-            if cardId and answerId:
-                mainController.submit_answer(question_data, raspi_id, cardId, answerId)
-                break
-
-        if got_question is False or cardId is False:
-            continue #Back to question retrieval
+        if card_id and answer_id:
+            mainController.submit_answer(question_data, raspi_id, card_id, answer_id)
