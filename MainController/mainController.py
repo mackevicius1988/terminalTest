@@ -50,7 +50,7 @@ def connect_terminal(raspi_id):
     if connection_data['success'] == 'false':
         if connection_data['error'] == 'unregistered':
             viewController.show_message(
-                '\n\n\n Unregistered\nTerminal is not registered to backend. \n\nREGISTERING...!')
+                'Unregistered\nTerminal is not registered to backend. \n\nREGISTERING...!')
             time.sleep(5)
             registration_data = backendService.register_terminal(raspi_id)
             if registration_data == 1:
