@@ -9,9 +9,6 @@ if __name__ == '__main__':
 
     while 1:
         question_data = mainController.get_and_display_question(raspi_id)
-        #if question_data['questionMapId'] is None:
-         #   continue
-
         got_question = question_data['questionMapId'] != ''
 
         while 1:
@@ -21,7 +18,9 @@ if __name__ == '__main__':
 
             if cardId and answerId:
                 mainController.submit_answer(question_data, raspi_id, cardId, answerId)
+                break
             else:
                 continue
 
-
+        if got_question is False or cardId is False:
+            continue
