@@ -115,7 +115,7 @@ def wait_for_nfc_input(layout, timeout):
     card_id, answer_id = nfcReader.read_nfc(timeout)
     print(layout)
 
-    
+
     if card_id in admin_cards:
         viewController.show_message("Shutting down PulseTip terminal...")
         time.sleep(2)
