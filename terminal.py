@@ -13,13 +13,15 @@ if __name__ == '__main__':
          #   continue
 
         got_question = question_data['questionMapId'] != ''
-        print(got_question)
 
-        cardId, answerId = mainController.wait_for_nfc_input(got_question);
+        while 1:
+            print(got_question)
 
-        if cardId and answerId:
-            mainController.submit_answer(question_data, raspi_id, cardId, answerId)
-        else:
-            continue
+            cardId, answerId = mainController.wait_for_nfc_input(got_question);
+
+            if cardId and answerId:
+                mainController.submit_answer(question_data, raspi_id, cardId, answerId)
+            else:
+                continue
 
 

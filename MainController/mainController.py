@@ -81,7 +81,7 @@ def get_and_show_question_stats(question_map_id, question_text, company_name, de
         viewController.display_question_stats(company_name + '(' + departament_name + ')',
                                               question_text,
                                               question_stats)
-    time.sleep(10)
+    time.sleep(5)
 
 
 def submit_answer(question_data, raspi_id, cardId, answerId):
