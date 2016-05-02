@@ -1,4 +1,4 @@
-import pygame, time, logging, serial
+import pygame, time, logging, snowflake
 
 from ViewController import viewController
 from BackendService import backendService
@@ -9,13 +9,23 @@ logging.basicConfig(format='%(asctime)s %(message)s', filename='terminal.log', l
 admin_cards = ["A1C43745", "E65C3745"]
 
 
+def get_or_generate_raspi_id():
+    if not snowflake.snowflake(snowflake_file='.raspi_id'):
+        print("RASPI ID not found. Looks like it's a new install. Generating RASPI ID...")
+        try:
+            snowflake.make_snowflake(snowflake_file='.raspi_id')
+        except Exception as e:
+            raise ("Failed to create raspi_id. Check if you have write permission on filesystem")
+    return snowflake.snowflake(snowflake_file='.raspi_id')
+
 def init():
     # TODO Read configuration
-    # TODO Init snowflake
+
     # Init screen
     viewController.init()
     # Register terminal to backend
-    raspi_id = "a5846b9b-9deb-4e5c-95bb-fe902d404212"  # 69 -> 2
+    raspi_id = get_or_generate_raspi_id()  # 69 -> 2
+    print(raspi_id)
     return raspi_id
 
 
