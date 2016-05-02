@@ -13,12 +13,14 @@ if __name__ == '__main__':
 
         if got_question is False:
             # No question, wait for the minute
-            time.sleep(60)
+            time.sleep(600)
             # Back to question retrieval
             continue
 
         while 1:
             card_id, answer_id = mainController.wait_for_nfc_input(60);
+            print(card_id)
+            print(answer_id)
             if card_id is False:
                 continue # wait for another input
 
