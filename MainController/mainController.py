@@ -54,7 +54,7 @@ def connect_terminal(raspi_id):
             time.sleep(5)
             registration_data = backendService.register_terminal(raspi_id)
             if registration_data == 1:
-                message = '\n\n\n\n Terminal successfully registered.\n\n Terminal ID: {0}\n\nPlace any card to restart terminal'.format(
+                message = 'Terminal successfully registered.\n\n Terminal ID: {0}\n\nPlace any card to restart terminal'.format(
                     raspi_id)
                 viewController.show_message(message)
                 time.sleep(10)
