@@ -18,10 +18,11 @@ if __name__ == '__main__':
             continue
 
         while 1:
-            print("Continuing...")
-            card_id, answer_id = mainController.wait_for_nfc_input(60)
+            layout = len(question_data['answers'])
+            card_id, answer_id = mainController.wait_for_nfc_input(layout, 60)
             if card_id is False:
                 continue # wait for another input
+
             break
 
         if card_id and answer_id:

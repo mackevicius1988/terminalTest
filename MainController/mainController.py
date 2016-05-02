@@ -92,6 +92,7 @@ def submit_answer(question_data, raspi_id, cardId, answerId):
     departament_name = question_data['departmentName']
 
     try:
+        viewController.say_thanks()
         submit_data = backendService.submit_answer(raspi_id, cardId, question_map_id, question_id, answerId)
     except Exception as e:
         viewController.show_error_message(e)
@@ -107,18 +108,25 @@ def submit_answer(question_data, raspi_id, cardId, answerId):
         viewController.show_message(error_message)
     else:
         # Just show the stats
-        viewController.say_thanks()
         get_and_show_question_stats(question_map_id, question_text, company_name, departament_name)
 
 
-def wait_for_nfc_input(timeout):
+def wait_for_nfc_input(layout, timeout):
     card_id, answer_id = nfcReader.read_nfc(timeout)
     if card_id in admin_cards:
         viewController.show_message("Shutting down PulseTip terminal...")
         time.sleep(2)
         pygame.quit()
         raise SystemExit
+
     #elif got_question is False and card_id not in admin_cards:
      #   return False, False
     else:
-        return card_id, answer_id
+        if layout == 5:
+            return card_id, answer_id
+        elif layout == 4:
+            pass
+        elif layout == 3:
+            pass
+        elif layout == 2:
+            pass
