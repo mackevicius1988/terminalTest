@@ -19,12 +19,10 @@ if __name__ == '__main__':
 
         while 1:
             print("Continuing...")
-            card_id, answer_id = mainController.wait_for_nfc_input(60);
-            print(card_id)
-            print(card_id)
-            print(answer_id)
+            card_id, answer_id = mainController.wait_for_nfc_input(60)
             if card_id is False:
                 continue # wait for another input
+            break
 
         if card_id and answer_id:
             mainController.submit_answer(question_data, raspi_id, card_id, answer_id)
