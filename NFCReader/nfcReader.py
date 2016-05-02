@@ -5,9 +5,6 @@ reverse_readers = True
 
 
 def read_nfc(timeout=60):
-    answer_id = "3"
-    card_id = "1233454"
-
     ser = serial.Serial("/dev/ttyAMA0", 38400, timeout=timeout)
     # Activate NFC readers
     ser.write("\r")
