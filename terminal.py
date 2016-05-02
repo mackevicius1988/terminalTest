@@ -19,8 +19,6 @@ if __name__ == '__main__':
             if cardId and answerId:
                 mainController.submit_answer(question_data, raspi_id, cardId, answerId)
                 break
-            else:
-                continue
 
         if got_question is False or cardId is False:
-            continue
+            continue #Back to question retrieval
