@@ -8,6 +8,7 @@ logging.basicConfig(format='%(asctime)s %(message)s', filename='terminal.log', l
 
 admin_cards = ["A1C43745", "E65C3745"]
 
+
 def init():
     # TODO Read configuration
     # TODO Init snowflake
@@ -113,8 +114,6 @@ def submit_answer(question_data, raspi_id, cardId, answerId):
 
 def wait_for_nfc_input(layout, timeout):
     card_id, answer_id = nfcReader.read_nfc(timeout)
-    print(layout)
-
 
     if card_id in admin_cards:
         viewController.show_message("Shutting down PulseTip terminal...")
@@ -123,9 +122,7 @@ def wait_for_nfc_input(layout, timeout):
         raise SystemExit
 
     else:
-        if layout == 5:
-            return card_id, answer_id
-        elif layout == 4:
+        if layout == 4:
             if answer_id == 3:
                 return False, False
         elif layout == 3:
@@ -134,3 +131,5 @@ def wait_for_nfc_input(layout, timeout):
         elif layout == 2:
             if answer_id in (2, 3, 4):
                 return False, False
+
+    return card_id, answer_id
