@@ -18,7 +18,7 @@ if __name__ == '__main__':
             continue
 
         while 1:
-            card_id, answer_id = mainController.wait_for_nfc_input();
+            card_id, answer_id = mainController.wait_for_nfc_input(60);
             if card_id is False:
                 continue # wait for another input
 
