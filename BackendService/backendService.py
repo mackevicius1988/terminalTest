@@ -63,7 +63,7 @@ def register_terminal(raspi_id):
 
 def get_question_stats(question_map_id):
     try:
-        url = backend_url + 'api/v1/question_day_stats/' + str(question_map_id)
+        url = backend_url + '/api/v1/question_day_stats/' + str(question_map_id)
         resp = requests.get(url)
         logging.info("Got response from backend for get_question_stats: " + resp.text)
         data = resp.json();
@@ -75,7 +75,7 @@ def get_question_stats(question_map_id):
 
 
 def submit_answer(raspi_id, cardId, questionMapId, questionId, answerId):
-    url = backend_url + "api/v1/answers/terminal/{0}/{1}/{2}/{3}/{4}".format(raspi_id, cardId, questionMapId,
+    url = backend_url + "/api/v1/answers/terminal/{0}/{1}/{2}/{3}/{4}".format(raspi_id, cardId, questionMapId,
                                                                              questionId, answerId)
     data = dict({'submit': 'submit'})
     try:

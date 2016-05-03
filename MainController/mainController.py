@@ -76,13 +76,13 @@ def connect_terminal(raspi_id):
             connection_data = backendService.connect_terminal(raspi_id)
         except Exception as e:
             viewController.show_message(
-                '\n\n\n Warning \n\nConnection to backend failed. Retrying... {0}'.format(trials_count))
+                'Warning \n\nConnection to backend failed. Retrying... {0}'.format(trials_count))
             print("connect_terminal to backend: ")
             time.sleep(10)
             trials_count += 1
             if trials_count == 5:
                 logging.error("ERROR: Can't connect to backend after 5 tries. Giving up...")
-                viewController.show_message('\n\n\nERROR\n\nCan\'t connect to backend after 5 tries. Giving up...')
+                viewController.show_message('ERROR\n\nCan\'t connect to backend after 5 tries. Giving up...')
                 time.sleep(5)
                 raise SystemExit
 
@@ -131,7 +131,7 @@ def get_and_show_question_stats(question_map_id, question_text, company_name, de
         viewController.display_question_stats(company_name + '(' + departament_name + ')',
                                               question_text,
                                               question_stats)
-    time.sleep(stats_timeout)
+    time.sleep(5)
 
 
 def submit_answer(question_data, raspi_id, cardId, answerId):
