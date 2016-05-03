@@ -8,21 +8,28 @@ if __name__ == '__main__':
     mainController.connect_terminal(raspi_id)
 
     while 1:
+        print("Looping")
         question_data = mainController.get_and_display_question(raspi_id)
         got_question = question_data is not None and question_data['questionMapId'] != ''
 
 
-        layout = len(question_data['answers'])
         while 1:
-            card_id, answer_id = mainController.wait_for_nfc_input(layout, 60)
-            if card_id is False:
-                continue  # wait for another input
+            if question_data is not None:
+                layout = len(question_data['answers'])
+            else:
+                layout = 5
 
-            if got_question is False:
+            card_id, answer_id = mainController.wait_for_nfc_input(layout, 1)
+
+            if got_question is False and card_id is False:
                 # No question, wait for the minute
-                time.sleep(60)
+                # time.sleep(60)
                 # Back to question retrieval
                 break
+
+
+            if card_id is False:
+                continue  # wait for another input
 
             break
 
