@@ -12,7 +12,6 @@ if __name__ == '__main__':
         question_data = mainController.get_and_display_question(raspi_id)
         got_question = question_data is not None and question_data['questionMapId'] != ''
 
-
         while 1:
             if question_data is not None:
                 layout = len(question_data['answers'])
@@ -20,7 +19,7 @@ if __name__ == '__main__':
                 layout = 5
 
             card_id, answer_id = mainController.wait_for_nfc_input(layout, 1)
-
+            print("CardId" + str(card_id))
             if got_question is False and card_id is False:
                 # No question, wait for the minute
                 # time.sleep(60)
