@@ -15,10 +15,9 @@ if config.has_option('General', 'serial_dev'):
 
 if config.has_option('General', 'serial_baud_rate'):
     serial_baud_rate = config.get('General', 'serial_baud_rate')
-if config.get('General', 'reverse_readers') == 'True' or config.get('General', 'reverse_readers') == 1:
+
+if config.has_option('General', 'reverse_readers') and (config.get('General', 'reverse_readers') == 'True' or config.get('General', 'reverse_readers') == 1):
     reverse_readers = True
-else:
-    reverse_readers = False
 
 
 def read_nfc(timeout=60):
