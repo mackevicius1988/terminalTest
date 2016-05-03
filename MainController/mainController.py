@@ -1,12 +1,50 @@
 import pygame, time, logging, snowflake
-
+import ConfigParser, os
 from ViewController import viewController
 from BackendService import backendService
 from NFCReader import nfcReader
 
 logging.basicConfig(format='%(asctime)s %(message)s', filename='terminal.log', level=logging.DEBUG)
 
-admin_cards = ["A1C43745", "E65C3745"]
+stats_timeout = 5
+admin_cards = ["", ""]
+
+def read_configurations():
+    global stats_timeout, admin_cards
+    print("Reading configurations file")
+    config = ConfigParser.RawConfigParser()
+    config.read('terminal.conf')
+
+    if config.has_option('General', 'serial_dev'):
+        serial_dev = config.get('General', 'serial_dev')
+
+    if config.has_option('General', 'serial_baud_rate'):
+        serial_baud_rate = config.get('General', 'serial_baud_rate')
+
+    if config.has_option('General', 'stats_timeout'):
+        stats_timeout = config.get('General', 'stats_timeout')
+
+    if not config.has_option('General', 'admin_card1'):
+        print("Admin cards not set. \nRegister primary admin card by touching any reader")
+        card_id = nfcReader.read_nfc(9999)
+        config.set('General', 'admin_card1', card_id[0])
+        with open('terminal.conf', 'wb') as configfile:
+            config.write(configfile)
+        print("Primary admin card registered")
+    admin_card1 = config.get('General', 'admin_card1')
+
+    time.sleep(3)
+
+    if not config.has_option('General', 'admin_card2'):
+        print("Secondary admin cards is not set. \nRegister secondary admin card by touching any reader")
+        card_id = nfcReader.read_nfc(9999)
+        config.set('General', 'admin_card2', card_id[0])
+        with open('terminal.conf', 'wb') as configfile:
+            config.write(configfile)
+        print("Secondary admin card registered")
+    admin_card2 = config.get('General', 'admin_card2')
+
+    admin_cards = (admin_card1, admin_card2)
 
 
 def get_or_generate_raspi_id():
@@ -18,9 +56,10 @@ def get_or_generate_raspi_id():
             raise ("Failed to create raspi_id. Check if you have write permission on filesystem")
     return snowflake.snowflake(snowflake_file='.raspi_id')
 
-def init():
-    # TODO Read configuration
 
+def init():
+    # Read configurations
+    read_configurations()
     # Init screen
     viewController.init()
     # Register terminal to backend
@@ -92,7 +131,7 @@ def get_and_show_question_stats(question_map_id, question_text, company_name, de
         viewController.display_question_stats(company_name + '(' + departament_name + ')',
                                               question_text,
                                               question_stats)
-    time.sleep(5)
+    time.sleep(stats_timeout)
 
 
 def submit_answer(question_data, raspi_id, cardId, answerId):

@@ -1,8 +1,20 @@
 import requests, logging
+import ConfigParser, os
 
-# Config
-# backendUrl = "http://localhost:8080"
 backend_url = "http://dev.pulsetip.com/"
+backend = 'app.pulsetip.com'
+protocol = 'http'
+
+config = ConfigParser.RawConfigParser()
+config.read('terminal.conf')
+
+if config.has_option('General', 'backend'):
+    backend = config.get('General', 'backend')
+
+if config.has_option('General', 'protocol'):
+    protocol = config.get('General', 'protocol')
+
+backend_url = protocol + '://' + backend
 
 
 def get_question_data(raspi_id):

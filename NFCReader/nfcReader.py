@@ -1,11 +1,28 @@
 # Class responsible for readeing nfc card
 import serial
+import ConfigParser, os
 
-reverse_readers = True
+reverse_readers = False
+serial_dev = '/dev/ttyAMA0'
+serial_baud_rate = 38400
+
+print("Reading configurations file")
+config = ConfigParser.RawConfigParser()
+config.read('terminal.conf')
+
+if config.has_option('General', 'serial_dev'):
+    serial_dev = config.get('General', 'serial_dev')
+
+if config.has_option('General', 'serial_baud_rate'):
+    serial_baud_rate = config.get('General', 'serial_baud_rate')
+if config.get('General', 'reverse_readers') == 'True' or config.get('General', 'reverse_readers') == 1:
+    reverse_readers = True
+else:
+    reverse_readers = False
 
 
 def read_nfc(timeout=60):
-    ser = serial.Serial("/dev/ttyAMA0", 38400, timeout=timeout)
+    ser = serial.Serial(serial_dev, serial_baud_rate, timeout=timeout)
     # Activate NFC readers
     ser.write("\r")
     serResponse = ser.readline()[:-2]
