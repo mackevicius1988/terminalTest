@@ -15,7 +15,6 @@ if __name__ == '__main__':
     mainController.connect_terminal(raspi_id)
 
     while 1:
-        print("Looping")
         question_data = mainController.get_and_display_question(raspi_id)
         got_question = question_data is not None and question_data['questionMapId'] != ''
 

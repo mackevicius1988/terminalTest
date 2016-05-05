@@ -124,7 +124,6 @@ def display_question_stats(department, question_text, answers):
     if layout != 0:
         position_indexes = answersPositionsMap[layout]
         for index in range(len(answers)):
-            print(index)
             answer = answers[index]
             percent = answer['percent']
             position = position_indexes[index]
