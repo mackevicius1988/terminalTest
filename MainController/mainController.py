@@ -9,6 +9,7 @@ logging.basicConfig(format='%(asctime)s %(message)s', filename='terminal.log', l
 stats_timeout = 5
 admin_cards = ["", ""]
 
+
 def read_configurations():
     global stats_timeout, admin_cards
     print("Reading configurations file")
@@ -147,18 +148,19 @@ def submit_answer(question_data, raspi_id, cardId, answerId):
     except Exception as e:
         viewController.show_error_message(e)
 
-    response_code = submit_data['code']
+    if submit_data is not None:
+        response_code = submit_data['code']
 
-    if response_code == 400:
+        if response_code == 400:
         # Say thanks for a while and show the stats
-        viewController.show_message("You already answered")
-        get_and_show_question_stats(question_map_id, question_text, company_name, departament_name)
-    elif submit_data['code'] == 401:
-        error_message = submit_data['message']
-        viewController.show_message(error_message)
-    else:
-        # Just show the stats
-        get_and_show_question_stats(question_map_id, question_text, company_name, departament_name)
+            viewController.show_message("You already answered")
+            get_and_show_question_stats(question_map_id, question_text, company_name, departament_name)
+        elif submit_data['code'] == 401:
+            error_message = submit_data['message']
+            viewController.show_message(error_message)
+        else:
+            # Just show the stats
+            get_and_show_question_stats(question_map_id, question_text, company_name, departament_name)
 
 
 def wait_for_nfc_input(layout, timeout):
